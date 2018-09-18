@@ -70,12 +70,12 @@ public final class PlayerRepository implements Repository<Player, Long> {
         try (PreparedStatement statement = connectionSupplier.get().prepareStatement(sql)) {
             statement.setLong(1, aLong);
             ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            Player player = new Player(
-                    resultSet.getLong("id"),
-                    resultSet.getString("name"),
-                    resultSet.getString("player_rank"),
-                    resultSet.getLong("score"));
+            Player player;
+            if (resultSet.first()) {
+                player = buildPlayerFromResultSet(resultSet);
+            } else {
+                player = null;
+            }
             return player;
         } catch (SQLException e) {
             throw new StorageException(e);
@@ -91,5 +91,14 @@ public final class PlayerRepository implements Repository<Player, Long> {
         } catch (SQLException e) {
             throw new StorageException(e);
         }
+    }
+
+    private static Player buildPlayerFromResultSet(ResultSet resultSet) throws SQLException {
+        return new Player(
+                resultSet.getLong("id"),
+                resultSet.getString("name"),
+                resultSet.getString("player_rank"),
+                resultSet.getLong("score")
+        );
     }
 }

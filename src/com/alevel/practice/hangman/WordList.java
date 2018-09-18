@@ -1,13 +1,14 @@
 package com.alevel.practice.hangman;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class WordList {
 
-    ArrayList<String> list;
+    List<String> list;
 
-    public WordList(ArrayList<String> list) {
+    public WordList(List<String> list) {
         this.list = list;
     }
 

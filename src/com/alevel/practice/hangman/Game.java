@@ -1,6 +1,7 @@
 package com.alevel.practice.hangman;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Game {
@@ -15,7 +16,7 @@ public class Game {
         noa.setAtempts();
         gtl.setUrl();
         gtl.getList();
-        ArrayList list = (ArrayList<String>)gtl.list;
+        List<String> list = gtl.list;
         wordList = new WordList(list);
         String randomWord = wordList.getRandomWord();
         word = new Word(randomWord);
