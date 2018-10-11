@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        body, html {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        #container {
+            height: 100%;
+        }
+
+        #header {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            background-color: #ccd;
+            width: 100%;
+            text-align: center;
+        }
+
+        #footer {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            height: 5em;
+            width: 100%;
+            background-color: #ccd;
+        }
+
+        #content {
+            position: absolute;
+            bottom: 5em;
+            top: 8em;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            /*align-content: center;*/
+        }
+
+        .calculate {
+            border: 2px solid lightgrey;
+            background-color: lightgrey;
+        }
+
+        .calculate:hover {
+            border-color: #A0A0A0;
+            background-color: #A0A0A0;
+        }
+
+        .converter * {
+            font-size: inherit;
+            padding: 0.2em;
+            margin: 0.1em 0.2em;
+        }
+
+        .converter input[type="text"], input[type="number"] {
+            border: 2px solid whitesmoke;
+            background-color: whitesmoke;
+        }
+
+        .converter input[type="text"]:hover, input[type="number"]:hover {
+            border-color: lightgrey;
+            background-color: lightgrey;
+        }
+
+        * {
+            -moz-box-sizing: content-box;
+            -webkit-box-sizing: content-box;
+            box-sizing: content-box;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+
+    <div id="header">
+        <h1>RATES CONVERTER</h1>
+    </div>
+
+    <div id="content">
+        <div class="converter" id="convert-usd">
+            <label for="input-usd">USD: </label>
+            <input type="number" class="converter-input" id="input-usd" placeholder="0.00">
+            <input type="button" class="calculate" id="calc-usd" value="Convert">
+            <label for="output-usd">Buy: </label>
+            <input type="text" readonly="readonly" class="output" id="output-usd" placeholder="0.00 UAH"/>
+            <label for="output-usd-sale">Sale: </label>
+            <input type="text" readonly="readonly" class="output" id="output-usd-sale" placeholder="0.00 UAH"/>
+        </div>
+        <div class="converter" id="convert-eur">
+            <label for="input-eur">EUR: </label>
+            <input type="number" class="converter-input" id="input-eur" placeholder="0.00">
+            <input type="button" class="calculate" id="calc-eur" value="Convert">
+            <label for="output-eur">Buy: </label>
+            <input type="text" readonly="readonly" class="output" id="output-eur" placeholder="0.00 UAH"/>
+            <label for="output-eur-sale">Sale: </label>
+            <input type="text" readonly="readonly" class="output" id="output-eur-sale" placeholder="0.00 UAH"/>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+</div>
+
+<script>
+
+    //Get currency rates information
+    axios.get('https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11')
+        .then(function (response) {
+            var data = response.data;
+            var USDData = f(data, 'USD');
+            var EURData = f(data, 'EUR');
+            var USDBuy = USDData.buy;
+            var EURBuy = EURData.buy;
+            var USDSale = USDData.sale;
+            var EURSale = EURData.sale;
+
+            console.log(USDData);
+
+
+            document.getElementById('calc-usd').addEventListener('click', usdcalc(USDBuy,USDSale));
+
+            document.getElementById('calc-eur').addEventListener('click', eurcalc(EURBuy, EURSale));
+
+
+
+        })
+        .catch(function (reason) {
+            console.error(reason)
+        });
+
+    function f(data, ccy) {
+        return data.filter(function (value) {
+            return value.ccy === ccy;
+        })[0];
+    }
+
+    function usdcalc(USDBuy, USDSale) {
+        return function () {
+            document.getElementById('output-usd').value = USDBuy * document.getElementById('input-usd').value;
+            document.getElementById('output-usd-sale').value = USDSale * document.getElementById('input-usd').value;
+        }
+    }
+
+    function eurcalc(EURBuy, EURSale) {
+        return function() {
+            document.getElementById('output-eur').value = EURBuy * document.getElementById('input-eur').value;
+            document.getElementById('output-eur-sale').value = EURSale * document.getElementById('input-eur').value;
+        }
+    }
+
+
+</script>
+</body>
+</html>
