@@ -28,35 +28,67 @@ public final class Application {
         try (Connection connection = DriverManager.getConnection(url, connectionProps)) {
 
             Supplier<Connection> connectionSupplier = new SingleConnectionPool(connection);
-
-            //create and save players
-            /*PlayerRepository playerRepository = new PlayerRepository(connectionSupplier);
-            for (String playerName : inputPlayerNames()) {
-                playerRepository.save(new Player(playerName));
-            }
-            for (Player player : playerRepository.list()) {
-                System.out.println(player);
-            }
-
-            //select single player by id
+            connection.setAutoCommit(false);
             PlayerRepository playerRepository = new PlayerRepository(connectionSupplier);
-            Player player = playerRepository.get(3L);
-            System.out.println(player);
-            */
-
             GameRepository gameRepository = new GameRepository(connectionSupplier);
-            /*Game game = gameRepository.get(2L);
-            System.out.println(game);
 
-            for (Game game1 : gameRepository.list()) {
-                System.out.println(game1);
-            }*/
+            Scanner scanner = new Scanner(System.in);
+            String command;
+            String commandList = "Commands: " +
+                    "\npa  - add players" +
+                    "\npls - list players" +
+                    "\nga  - add games" +
+                    "\ngls - list games" +
+                    "\nq   - exit";
+            System.out.println(commandList);
+            while (true) {
+                System.out.print("> ");
+                command = scanner.next().trim().toLowerCase();
 
-            List<Long> list = new ArrayList<>();
-            list.add(2L);
-            list.add(3L);
-            Game game2 = new Game(4L, 3L, 30L, list);
-            gameRepository.save(game2);
+                if ("pa".equals(command)) {
+                    System.out.println("enter player name: ");
+                    String name = scanner.nextLine();
+                    Player player = new Player(name);
+                    playerRepository.save(player);
+                } else if ("pls".equals(command)) {
+                    for (Player player : playerRepository.list()) {
+                        System.out.printf("%d: name = %s; score = %d; rank = %s\n",
+                                player.getId(), player.getNickname(), player.getScore(), player.getRank());
+                    }
+                } else if ("ga".equals(command)) {
+                    System.out.println("Enter number of participants: ");
+                    int partNumber = scanner.nextInt();
+                    System.out.println("Enter participants ids: ");
+                    List<Long> players = new ArrayList<>(partNumber);
+                    for (int i = 0; i < partNumber; i++) {
+                        players.add(scanner.nextLong());
+                    }
+                    System.out.println("Enter winner id: ");
+                    Long winnerId = scanner.nextLong();
+                    System.out.println("Enter score: ");
+                    Long score = scanner.nextLong();
+
+                    gameRepository.save(new Game(null, winnerId, score, players));
+
+                } else if ("gls".equals(command)) {
+                    for (Game game : gameRepository.list()) {
+                        String gameString = String.valueOf(game.getId()) + ": " +
+                                "winner = " +
+                                game.getWinnerId() +
+                                "; score = " +
+                                game.getScore() +
+                                "; participants = " +
+                                game.getPlayers();
+                        System.out.println(gameString);
+                    }
+                } else if ("q".equals(command)) {
+                    System.out.println("bye!");
+                    break;
+                } else {
+                    System.out.println(commandList);
+                }
+
+            }
 
 
         } catch (SQLException | StorageException e) {
