@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo List</title>
+    <!-- Axios is a simple promise-based http client for JS -->
+    <script src="assets/js/axios.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <div id="header" class="header">
+        <input type="text" id="question-input" placeholder="What you want to ask?">
+        <button id="question-btn" class="control-btn">Get answer</button>
+    </div>
+    <div id="answer">
+        <input type="text" id="unswer-input" placeholder="Type the answer.">
+        <button id="answer-btn" class="control-btn">Set answer</button>
+        <output type="text" id="unswer-output"></output>
+    </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
