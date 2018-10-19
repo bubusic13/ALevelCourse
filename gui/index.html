@@ -145,15 +145,15 @@
 
     function usdcalc(USDBuy, USDSale) {
         return function () {
-            document.getElementById('output-usd').value = USDBuy * document.getElementById('input-usd').value;
-            document.getElementById('output-usd-sale').value = USDSale * document.getElementById('input-usd').value;
+            document.getElementById('output-usd').value = (USDBuy * document.getElementById('input-usd').value).toFixed(2);
+            document.getElementById('output-usd-sale').value = (USDSale * document.getElementById('input-usd').value).toFixed(2);
         }
     }
 
     function eurcalc(EURBuy, EURSale) {
         return function() {
-            document.getElementById('output-eur').value = EURBuy * document.getElementById('input-eur').value;
-            document.getElementById('output-eur-sale').value = EURSale * document.getElementById('input-eur').value;
+            document.getElementById('output-eur').value = (EURBuy * document.getElementById('input-eur').value).toFixed(2);
+            document.getElementById('output-eur-sale').value = (EURSale * document.getElementById('input-eur').value).toFixed(2);
         }
     }
 

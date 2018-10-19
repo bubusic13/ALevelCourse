@@ -1,23 +1,30 @@
 package com.alevel.todolist;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Objects;
 
-public class Todo {
+public final class Todo {
 
     private final Long id;
 
-    private String text;
+    private final String text;
 
-    private Boolean done;
+    private final Boolean done;
 
     public Todo(String text) {
         this.id = null;
         this.text = text;
         this.done = false;
-
     }
 
-    public Todo(Long id, String text, boolean done) {
+    @JsonCreator
+    public Todo(
+            @JsonProperty("id") Long id,
+            @JsonProperty("text") String text,
+            @JsonProperty("done") Boolean done
+    ) {
         this.id = id;
         this.text = text;
         this.done = done;
@@ -31,7 +38,7 @@ public class Todo {
         return text;
     }
 
-    public boolean isDone() {
+    public Boolean isDone() {
         return done;
     }
 
@@ -40,14 +47,22 @@ public class Todo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Todo todo = (Todo) o;
-        return done == todo.done &&
-                Objects.equals(id, todo.id) &&
-                Objects.equals(text, todo.text);
+        return Objects.equals(id, todo.id) &&
+                Objects.equals(text, todo.text) &&
+                Objects.equals(done, todo.done);
     }
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, text, done);
+    }
+
+    @Override
+    public String toString() {
+        return "Todo{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", done=" + done +
+                '}';
     }
 }
