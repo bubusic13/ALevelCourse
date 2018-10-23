@@ -4,18 +4,18 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 
-public class QuestionUnswer {
+public class QuestionAnswer {
 
     private final String question;
 
-    private final String unswer;
+    private final String answer;
 
     @JsonCreator
-    public QuestionUnswer(
+    public QuestionAnswer(
             @JsonProperty("question") String question,
-            @JsonProperty("unswer") String unswer) {
+            @JsonProperty("answer") String answer) {
         this.question = question;
-        this.unswer = unswer;
+        this.answer = answer;
     }
 
 
@@ -25,30 +25,30 @@ public class QuestionUnswer {
         return question;
     }
 
-    public String getUnswer() {
-        return unswer;
+    public String getAnswer() {
+        return answer;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        QuestionUnswer that = (QuestionUnswer) o;
+        QuestionAnswer that = (QuestionAnswer) o;
         return Objects.equals(question, that.question) &&
-                Objects.equals(unswer, that.unswer);
+                Objects.equals(answer, that.answer);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(question, unswer);
+        return Objects.hash(question, answer);
     }
 
     @Override
     public String toString() {
-        return "QuestionUnswer{" +
+        return "QuestionAnswer{" +
                 "question='" + question + '\'' +
-                ", unswer='" + unswer + '\'' +
+                ", answer='" + answer + '\'' +
                 '}';
     }
 }

@@ -6,45 +6,46 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class QuestionUnswerRepository {
+public class QuestionAnswerRepository {
 
     private final DataSource dataSource;
 
-    public QuestionUnswerRepository(DataSource dataSource)  {
+    public QuestionAnswerRepository(DataSource dataSource)  {
         this.dataSource = dataSource;
     }
 
-    public void save(QuestionUnswer entity) throws QuestionUnswerException{
-        String sql = "INSERT INTO question_answer (question, unswer) VALUES (?,?)";
+    public void save(QuestionAnswer entity) throws QuestionAnswerException {
+        String sql = "INSERT INTO question_answer (question, answer) VALUES (?,?)";
 
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, entity.getQuestion());
-            preparedStatement.setString(2, entity.getUnswer());
+            preparedStatement.setString(2, entity.getAnswer());
             preparedStatement.executeUpdate();
 
 
         }catch (SQLException e) {
-            throw new QuestionUnswerException(e);
+            throw new QuestionAnswerException(e);
         }
     }
 
-    public String getUnswer(String inputQuestion) throws QuestionUnswerException{
-        String unswer = "";
+    public String getAnswer(String inputQuestion) throws QuestionAnswerException {
+        String answer;
 
-        String sql = "SELECT unswer FROM question_answer where question = ?";
+        String sql = "SELECT answer FROM question_answer WHERE question = ?";
 
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, inputQuestion);
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.first();
-            unswer = resultSet.getString("unswer");
-            return unswer;
+            answer = resultSet.getString("answer");
+
         }
 
         catch (SQLException e) {
-            throw new QuestionUnswerException(e);
+            throw new QuestionAnswerException(e);
         }
+        return answer;
     }
 }
